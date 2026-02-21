@@ -69,7 +69,7 @@
             3. Conduct tests
                 - Creates necessary / relevant tests to answer question, is able to achieve a result per test, and can create visuals for test outcomes
             4. Provide answer
-                - narrative explanation is available along with supporting test outcomes and visuals and no new
+                - narrative explanation is available along with supporting test outcomes and visuals and no new information
     4. State Update / Reflection
         - How does the agent record progress?
         - How does it track what has been tried vs. what remains?
@@ -85,4 +85,13 @@
             - Avoids circles by asking user when to stop
             - A complete defensible answer is determined by relevant statistical signals e.g. p-value
             - no new insights provided in last iteration
+- **Decision / Action Selection**
+    1. Preconditions for each action
+    2. Priority Ordering
+        - Data exploration should always take highest priority, followed by clarifying question, conducting tests, and finally providing an answer
+    3. Non-Progress Rule
+        - If no meaningful progress or insights are gained after an iteration, then and only then should the agent proceed to provide the answer
+    4. Failure Mode Analysis
+        - 
+
         
