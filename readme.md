@@ -86,12 +86,71 @@
             - A complete defensible answer is determined by relevant statistical signals e.g. p-value
             - no new insights provided in last iteration
 - **Decision / Action Selection**
-    1. Preconditions for each action
-    2. Priority Ordering
-        - Data exploration should always take highest priority, followed by clarifying question, conducting tests, and finally providing an answer
-    3. Non-Progress Rule
-        - If no meaningful progress or insights are gained after an iteration, then and only then should the agent proceed to provide the answer
-    4. Failure Mode Analysis
-        - 
+    1. Preconditions for Each Action (Explicit Gating Logic)
+
+        Clarifying Questions is selected when ambiguity exists in the current state that prevents valid inference.
+        This includes:
+        - Undefined or ambiguous target variable
+        - Missing variable definitions or units
+        - Contradictory constraints
+        - Dataset structure misaligned with the requested analysis
+        - Insufficient information to construct a defensible hypothesis
+
+        Explore the Data is selected when the agent lacks sufficient structural understanding of the dataset to defensibly construct, evaluate, or validate a hypothesis.
+        This includes:
+        - No descriptive statistics computed
+        - No distributional understanding
+        - No variable relationship assessment
+        - Test assumptions not yet evaluated
+        - Anomalies or unexpected results requiring further investigation
+
+        Statistical Tests is selected only when:
+        - A clearly defined hypothesis exists
+        - Relevant variables have been validated
+        - Descriptive statistics are available
+        - Statistical assumptions for candidate tests have been evaluated
+        - The agent has identified a test appropriate to the data structure and research objective
+
+        Provide Answer is selected only when:
+        - The original question has a clearly defined objective or hypothesis
+        - Evidence has been generated that directly addresses the objective
+        - No unresolved ambiguities remain
+        - Statistical results and visualizations support a defensible conclusion
+        - Additional iterations are unlikely to materially change the interpretation
+
+    2. Priority Ordering (Hierarchy of Actions)
+
+        i. Clarifying Questions (resolve ambiguity first)
+
+        ii. Explore the Data (build structural understanding)
+
+        iii. Conduct Statistical Tests (generate formal evidence)
+
+        iv. Provide Answer (synthesize and conclude)
+
+        **Note**: When multiple actions are valid, the agent selects the one that most reduces uncertainty relative to the user’s objective.
+
+    3. Non-Progress Rule (Reflection Trigger)
+
+        If an iteration produces no meaningful reduction in uncertainty or explanatory power, the agent must:
+        - Re-evaluate the hypothesis formulation
+        - Re-check statistical assumptions
+        - Assess whether the selected analysis method is appropriate
+        - Determine whether the question is answerable with available data
+
+        The agent only proceeds to provide an answer if further uncertainty reduction is not possible given the current data.
+
+    4. Failure Mode Analysis (Primary Risk and Safeguard)
+
+        Primary Failure Mode: Providing an answer prematurely before sufficient evidence exists.
+
+        Safeguard Mechanism:
+        Before providing an answer, the agent performs an internal logical audit:
+        - Have all required variables been validated?
+        - Have test assumptions been checked?
+        - Is the conclusion robust to anomalies or outliers?
+        - Would additional exploration meaningfully alter the interpretation?
+
+        If any audit check fails, the agent returns to exploration or hypothesis refinement rather than terminating.
 
         
