@@ -153,4 +153,63 @@
 
         If any audit check fails, the agent returns to exploration or hypothesis refinement rather than terminating.
 
+- **Tooling Architecture**
+    - Requirements
+        1. Tool Name
+        2. Tool purpose
+        3. Inputs
+        4. Outputs
+        5. Triggers
+    - Tool boundaries
+        - Tools cannot call other tools
+        - Tools cannot decide when to run
+        - Only the reasoning loop controls sequencing
+    1. Read data
+        - data reader
+        - read user-provided dataset
+        - Most common dataset types e.g. .csv, .txt, .parquet
+        - standard data science dataframe e.g. pandas dataframe
+        - User provides / uploads a data file
+    2. Pre-process data
+        - data preprocessor
+        - handles missing values, data type conversions, etc.
+        - data reader output i.e. a pandas dataframe
+        - cleaned, analysis-ready dataframe
+        - A new dataframe becomes available
+    3. Compute Summary Metrics
+        - data explorer
+        - computes all summary metrics including columns counts, median, mean, standard deviation, distrubitions, data types, and variable relationships
+        - cleaned, analysis ready dataframe
+        - EDA summary tables including: descriptive statistics, distribution summaries, variable types, and relationship metrics
+        - a new cleaned, analysis-ready dataframe becomes available
+    4. Statistical Planner
+        - statistical planner
+        - create a hypothesis based on user question and dataset context along with the needed test(s) to accept / reject the hypothesis
+        - user question, cleaned analysis-ready dataset, summary tables from explorer
+        - a hypothesis along with needed test(s) to accept / reject
+        - all previous tools have created their outputs(data reader, processor, describer, understander) and user has submitted a question
+    6. Run statiscal tests
+        - statistical tester
+        - run and compute the output of a hypothesis test set
+        - hypothesis and statistical tests and cleaned, analysis-ready dataframe
+        - test results for the hypothesis set including: test statistic, p-value, confidence intervals, and other relevant metrics
+        - a new hypothesis becomes available that hasn't been tested yet
+    7. Evaluate evidence
+        - evidence evaluator
+        - decides if there is enough evidence to provide the narrative answer
+        - every currently available hypothesis along with its test results
+        - decision: CONTINUE_ANALYSIS or FINALIZE_ANSWER
+        - a new test result has become available
+    8. Create plots
+        - visualizer
+        - produces relevant plot(s) to help with interpration
+        - EDA outputs, statistical test results, and cleaned dataset
+        - relevant plots, charts, graphs, etc. 
+        - Evaluator's decision is FINALIZE_ANSWER
+    9. Narrative explanation
+        - explainer 
+        - converts numerical inputs into a plain engilsh output that is inutive and explains the final answer
+        - full hypothesis and statiscal test set, computed statisical metrics from statitical tester, visualizations, and user question
+        - a paragraph summarizing the evidence and conclusion i.e. a statisically-defensible narrative answer to the user question
+        - Evaluator's decision is FINALIZE_ANSWER
         
